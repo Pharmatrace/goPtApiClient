@@ -1,0 +1,2290 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: api@pharmatrace.io
+    name: The PharmaTrace API team
+  description: The PharmaTrace SCIN API provides network members a resource and process oriented access to the blockchain backed market and inventory information. It represents a layer of abstraction above the Hyperledger network to facilitate a business focused development of clients and integration systems without the need to directly connect to Hyperledger nodes.
+  license:
+    name: MIT
+    url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
+  termsOfService: https://pharmatrace.io/terms
+  title: PharmaTrace Supply Chain Information Network API
+  version: 0.0.1
+servers:
+- url: https://api.pharmatrace.io/v1
+paths:
+  /pharmaceuticals:
+    get:
+      description: |
+        Returns all pharmaceuticals from the system that the user has access to
+        Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+
+        Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+      operationId: findPharmaceuticals
+      parameters:
+      - description: tags to filter by
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: maximum number of results to return
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Pharmaceutical'
+                type: array
+          description: pharmaceutical response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Pharmaceuticals
+    post:
+      description: Creates a new pharmaceutical
+      operationId: addPharmaceutical
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pharmaceutical'
+        description: Pharmaceutical to create
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pharmaceutical'
+          description: pharmaceutical response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Pharmaceuticals
+  /pharmaceuticals/{id}:
+    delete:
+      description: deletes a single pharmaceutical based on the ID supplied
+      operationId: deletePharmaceutical
+      parameters:
+      - description: ID of pharmaceutical to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        204:
+          description: pharmaceutical deleted
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Pharmaceuticals
+    get:
+      description: Returns a pharmaceutical based on the ID
+      operationId: find pharmaceutical by id
+      parameters:
+      - description: ID of pharmaceutical to fetch
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pharmaceutical'
+          description: pharmaceutical response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Pharmaceuticals
+  /containers:
+    get:
+      description: |
+        Returns all containers from the system that the user has access to
+        Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+
+        Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+      operationId: findContainers
+      parameters:
+      - description: tags to filter by
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: maximum number of results to return
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Container'
+                type: array
+          description: container response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Containers
+    post:
+      description: Creates a new container
+      operationId: addContainer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Container'
+        description: Container to create
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Container'
+          description: container response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Containers
+  /containers/{id}:
+    delete:
+      description: deletes a single container based on the ID supplied
+      operationId: deleteContainer
+      parameters:
+      - description: ID of container to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        204:
+          description: container deleted
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Containers
+    get:
+      description: Returns a container based on the ID
+      operationId: find container by id
+      parameters:
+      - description: ID of container to fetch
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Container'
+          description: container response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Containers
+  /locations:
+    get:
+      description: |
+        Returns all locations from the system that the user has access to
+        Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+
+        Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+      operationId: findLocations
+      parameters:
+      - description: tags to filter by
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: maximum number of results to return
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Location'
+                type: array
+          description: location response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Locations
+    post:
+      description: Creates a new location
+      operationId: addLocation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+        description: Location to create
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+          description: location response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Locations
+  /locations/{id}:
+    delete:
+      description: deletes a single location based on the ID supplied
+      operationId: deleteLocation
+      parameters:
+      - description: ID of location to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        204:
+          description: location deleted
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Locations
+    get:
+      description: Returns a location based on the ID
+      operationId: find location by id
+      parameters:
+      - description: ID of location to fetch
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+          description: location response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Locations
+  /stakeholders:
+    get:
+      description: |
+        Returns all stakeholders from the system that the user has access to
+        Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+
+        Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+      operationId: findStakeholders
+      parameters:
+      - description: tags to filter by
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: maximum number of results to return
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Stakeholder'
+                type: array
+          description: stakeholder response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Stakeholders
+    post:
+      description: Creates a new stakeholder
+      operationId: addStakeholder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Stakeholder'
+        description: Stakeholder to create
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stakeholder'
+          description: stakeholder response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Stakeholders
+  /stakeholders/{id}:
+    delete:
+      description: deletes a single stakeholder based on the ID supplied
+      operationId: deleteStakeholder
+      parameters:
+      - description: ID of stakeholder to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        204:
+          description: stakeholder deleted
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Stakeholders
+    get:
+      description: Returns a stakeholder based on the ID
+      operationId: find stakeholder by id
+      parameters:
+      - description: ID of stakeholder to fetch
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stakeholder'
+          description: stakeholder response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Stakeholders
+  /wallets:
+    get:
+      description: |
+        Returns all wallets from the system that the user has access to
+        Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+
+        Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+      operationId: findWallets
+      parameters:
+      - description: tags to filter by
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: maximum number of results to return
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Wallet'
+                type: array
+          description: wallet response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Wallets
+    post:
+      description: Creates a new wallet
+      operationId: addWallet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Wallet'
+        description: Wallet to create
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+          description: wallet response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Wallets
+  /wallets/{id}:
+    delete:
+      description: deletes a single wallet based on the ID supplied
+      operationId: deleteWallet
+      parameters:
+      - description: ID of wallet to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        204:
+          description: wallet deleted
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Wallets
+    get:
+      description: Returns a wallet based on the ID
+      operationId: find wallet by id
+      parameters:
+      - description: ID of wallet to fetch
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+          description: wallet response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Wallets
+  /legaltxtermss:
+    get:
+      description: |
+        Returns all legaltxtermss from the system that the user has access to
+        Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+
+        Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+      operationId: findLegalTxTermss
+      parameters:
+      - description: tags to filter by
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: maximum number of results to return
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/LegalTxTerms'
+                type: array
+          description: legaltxterms response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - LegalTxTermss
+    post:
+      description: Creates a new legaltxterms
+      operationId: addLegalTxTerms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LegalTxTerms'
+        description: LegalTxTerms to create
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalTxTerms'
+          description: legaltxterms response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - LegalTxTermss
+  /legaltxtermss/{id}:
+    delete:
+      description: deletes a single legaltxterms based on the ID supplied
+      operationId: deleteLegalTxTerms
+      parameters:
+      - description: ID of legaltxterms to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        204:
+          description: legaltxterms deleted
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - LegalTxTermss
+    get:
+      description: Returns a legaltxterms based on the ID
+      operationId: find legaltxterms by id
+      parameters:
+      - description: ID of legaltxterms to fetch
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalTxTerms'
+          description: legaltxterms response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - LegalTxTermss
+  /trades:
+    get:
+      description: |
+        Returns all trades from the system that the user has access to
+        Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+
+        Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+      operationId: findTrades
+      parameters:
+      - description: tags to filter by
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: maximum number of results to return
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Trade'
+                type: array
+          description: trade response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Trades
+    post:
+      description: Creates a new trade
+      operationId: addTrade
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trade'
+        description: Trade to create
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trade'
+          description: trade response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Trades
+  /trades/{id}:
+    delete:
+      description: deletes a single trade based on the ID supplied
+      operationId: deleteTrade
+      parameters:
+      - description: ID of trade to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        204:
+          description: trade deleted
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Trades
+    get:
+      description: Returns a trade based on the ID
+      operationId: find trade by id
+      parameters:
+      - description: ID of trade to fetch
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trade'
+          description: trade response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Trades
+  /transports:
+    get:
+      description: |
+        Returns all transports from the system that the user has access to
+        Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+
+        Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+      operationId: findTransports
+      parameters:
+      - description: tags to filter by
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: maximum number of results to return
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Transport'
+                type: array
+          description: transport response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Transports
+    post:
+      description: Creates a new transport
+      operationId: addTransport
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transport'
+        description: Transport to create
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transport'
+          description: transport response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Transports
+  /transports/{id}:
+    delete:
+      description: deletes a single transport based on the ID supplied
+      operationId: deleteTransport
+      parameters:
+      - description: ID of transport to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        204:
+          description: transport deleted
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Transports
+    get:
+      description: Returns a transport based on the ID
+      operationId: find transport by id
+      parameters:
+      - description: ID of transport to fetch
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transport'
+          description: transport response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Transports
+  /repackages:
+    get:
+      description: |
+        Returns all repackages from the system that the user has access to
+        Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+
+        Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+      operationId: findRepackages
+      parameters:
+      - description: tags to filter by
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: maximum number of results to return
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Repackage'
+                type: array
+          description: repackage response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Repackages
+    post:
+      description: Creates a new repackage
+      operationId: addRepackage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Repackage'
+        description: Repackage to create
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Repackage'
+          description: repackage response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Repackages
+  /repackages/{id}:
+    delete:
+      description: deletes a single repackage based on the ID supplied
+      operationId: deleteRepackage
+      parameters:
+      - description: ID of repackage to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        204:
+          description: repackage deleted
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Repackages
+    get:
+      description: Returns a repackage based on the ID
+      operationId: find repackage by id
+      parameters:
+      - description: ID of repackage to fetch
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Repackage'
+          description: repackage response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Repackages
+  /informationquerys:
+    get:
+      description: |
+        Returns all informationquerys from the system that the user has access to
+        Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+
+        Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+      operationId: findInformationQuerys
+      parameters:
+      - description: tags to filter by
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: maximum number of results to return
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/InformationQuery'
+                type: array
+          description: informationquery response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - InformationQuerys
+    post:
+      description: Creates a new informationquery
+      operationId: addInformationQuery
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InformationQuery'
+        description: InformationQuery to create
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InformationQuery'
+          description: informationquery response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - InformationQuerys
+  /informationquerys/{id}:
+    delete:
+      description: deletes a single informationquery based on the ID supplied
+      operationId: deleteInformationQuery
+      parameters:
+      - description: ID of informationquery to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        204:
+          description: informationquery deleted
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - InformationQuerys
+    get:
+      description: Returns a informationquery based on the ID
+      operationId: find informationquery by id
+      parameters:
+      - description: ID of informationquery to fetch
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InformationQuery'
+          description: informationquery response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - InformationQuerys
+  /informationqueryresponses:
+    get:
+      description: |
+        Returns all informationqueryresponses from the system that the user has access to
+        Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+
+        Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+      operationId: findInformationQueryResponses
+      parameters:
+      - description: tags to filter by
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: maximum number of results to return
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/InformationQueryResponse'
+                type: array
+          description: informationqueryresponse response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - InformationQueryResponses
+    post:
+      description: Creates a new informationqueryresponse
+      operationId: addInformationQueryResponse
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InformationQueryResponse'
+        description: InformationQueryResponse to create
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InformationQueryResponse'
+          description: informationqueryresponse response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - InformationQueryResponses
+  /informationqueryresponses/{id}:
+    delete:
+      description: deletes a single informationqueryresponse based on the ID supplied
+      operationId: deleteInformationQueryResponse
+      parameters:
+      - description: ID of informationqueryresponse to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        204:
+          description: informationqueryresponse deleted
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - InformationQueryResponses
+    get:
+      description: Returns a informationqueryresponse based on the ID
+      operationId: find informationqueryresponse by id
+      parameters:
+      - description: ID of informationqueryresponse to fetch
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InformationQueryResponse'
+          description: informationqueryresponse response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - InformationQueryResponses
+  /profiles:
+    get:
+      description: |
+        Returns all profiles from the system that the user has access to
+        Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+
+        Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+      operationId: findProfiles
+      parameters:
+      - description: tags to filter by
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: maximum number of results to return
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Profile'
+                type: array
+          description: profile response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Profiles
+    post:
+      description: Creates a new profile
+      operationId: addProfile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+        description: Profile to create
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: profile response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Profiles
+  /profiles/{id}:
+    delete:
+      description: deletes a single profile based on the ID supplied
+      operationId: deleteProfile
+      parameters:
+      - description: ID of profile to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        204:
+          description: profile deleted
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Profiles
+    get:
+      description: Returns a profile based on the ID
+      operationId: find profile by id
+      parameters:
+      - description: ID of profile to fetch
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: profile response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Profiles
+  /activitys:
+    get:
+      description: |
+        Returns all activitys from the system that the user has access to
+        Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+
+        Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+      operationId: findActivitys
+      parameters:
+      - description: tags to filter by
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: maximum number of results to return
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Activity'
+                type: array
+          description: activity response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Activitys
+    post:
+      description: Creates a new activity
+      operationId: addActivity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Activity'
+        description: Activity to create
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activity'
+          description: activity response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Activitys
+  /activitys/{id}:
+    delete:
+      description: deletes a single activity based on the ID supplied
+      operationId: deleteActivity
+      parameters:
+      - description: ID of activity to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        204:
+          description: activity deleted
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Activitys
+    get:
+      description: Returns a activity based on the ID
+      operationId: find activity by id
+      parameters:
+      - description: ID of activity to fetch
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activity'
+          description: activity response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - Activitys
+  /systeminformations:
+    get:
+      description: |
+        Returns all systeminformations from the system that the user has access to
+        Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+
+        Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+      operationId: findSystemInformations
+      parameters:
+      - description: tags to filter by
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: maximum number of results to return
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/SystemInformation'
+                type: array
+          description: systeminformation response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - SystemInformations
+    post:
+      description: Creates a new systeminformation
+      operationId: addSystemInformation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SystemInformation'
+        description: SystemInformation to create
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemInformation'
+          description: systeminformation response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - SystemInformations
+  /systeminformations/{id}:
+    delete:
+      description: deletes a single systeminformation based on the ID supplied
+      operationId: deleteSystemInformation
+      parameters:
+      - description: ID of systeminformation to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        204:
+          description: systeminformation deleted
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - SystemInformations
+    get:
+      description: Returns a systeminformation based on the ID
+      operationId: find systeminformation by id
+      parameters:
+      - description: ID of systeminformation to fetch
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemInformation'
+          description: systeminformation response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      tags:
+      - SystemInformations
+  /me:
+    get:
+      description: The User Profile endpoint returns information about the PharmaTrace user that has authorized with the application.
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: Profile information for a user
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: User Profile
+      tags:
+      - User
+  /locationHistory:
+    get:
+      description: Returns the location history of a container or a individually labeled pharmaceutical
+      parameters:
+      - description: container id of the tracked container.
+        explode: true
+        in: query
+        name: container_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Offset the list of returned results by this amount. Default is zero.
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: Number of items to retrieve. Default is 5, maximum is 100.
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Locations'
+          description: History information for the given container
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Location History
+      tags:
+      - Container
+components:
+  schemas:
+    Pharmaceutical:
+      example:
+        image: image
+        pharmaceutical_id: pharmaceutical_id
+        gtin: gtin
+        manufacturer_id: manufacturer_id
+        ean_code: ean_code
+        trade_name: trade_name
+      properties:
+        pharmaceutical_id:
+          description: Either gtin or synthetical for precision medicine.
+          type: string
+        gtin:
+          description: Global trade item number (GS1)
+          type: string
+        trade_name:
+          description: Manufacturers official name of the pharmaceutical product.
+          type: string
+        ean_code:
+          description: EAN code.
+          type: string
+        manufacturer_id:
+          description: Manufaturer id
+          type: string
+        image:
+          description: Image URL representing the product.
+          type: string
+      type: object
+    PharmaceuticalList:
+      properties:
+        products:
+          description: Contains the list of products
+          items:
+            $ref: '#/components/schemas/Pharmaceutical'
+          type: array
+      type: object
+    Container:
+      example:
+        rf_id: rf_id
+        current_location_id: current_location_id
+        unit: unit
+        quantity: 0.80082819046101150206595775671303272247314453125
+        label: label
+        epc_code: epc_code
+        barcode: barcode
+        container_id: container_id
+        owner_stakeholder_id: owner_stakeholder_id
+        parent_container_id: parent_container_id
+      properties:
+        container_id:
+          description: Unique identifier representing a specific container.
+          type: string
+        epc_code:
+          description: EPC code
+          type: string
+        label:
+          description: Serialization label.
+          type: string
+        barcode:
+          description: barcode on container. Normally equal to container id.
+          type: string
+        rf_id:
+          description: RFID of RF tracking label on conatiner.
+          type: string
+        quantity:
+          description: quantity of product in container.
+          type: number
+        unit:
+          description: Unit for quantity measurement.
+          type: string
+        current_location_id:
+          description: Location id of last tracked locaction.
+          type: string
+        owner_stakeholder_id:
+          description: stakeholder id of the last tracked owner of the container.
+          type: string
+        parent_container_id:
+          description: id of the parent container or null.
+          type: string
+      type: object
+    Containers:
+      properties:
+        offset:
+          description: Position in pagination.
+          format: int32
+          type: integer
+        limit:
+          description: Number of items to retrieve (100 max).
+          format: int32
+          type: integer
+        count:
+          description: Total number of items available.
+          format: int32
+          type: integer
+        listing:
+          items:
+            $ref: '#/components/schemas/Container'
+          type: array
+      type: object
+    Locations:
+      example:
+        offset: 0
+        limit: 6
+        count: 1
+        history:
+        - latitude: 1.46581298050294517310021547018550336360931396484375
+          uuid: uuid
+          location_type: location_type
+          timestamp: 0
+          longitude: 6.02745618307040320615897144307382404804229736328125
+        - latitude: 1.46581298050294517310021547018550336360931396484375
+          uuid: uuid
+          location_type: location_type
+          timestamp: 0
+          longitude: 6.02745618307040320615897144307382404804229736328125
+      properties:
+        offset:
+          description: Position in pagination.
+          format: int32
+          type: integer
+        limit:
+          description: Number of items to retrieve (100 max).
+          format: int32
+          type: integer
+        count:
+          description: Total number of items available.
+          format: int32
+          type: integer
+        history:
+          items:
+            $ref: '#/components/schemas/Location'
+          type: array
+      type: object
+    Location:
+      example:
+        latitude: 1.46581298050294517310021547018550336360931396484375
+        uuid: uuid
+        location_type: location_type
+        timestamp: 0
+        longitude: 6.02745618307040320615897144307382404804229736328125
+      properties:
+        timestamp:
+          description: GMT, C time format.
+          format: int64
+          type: integer
+        uuid:
+          description: Unique identifier for the location.
+          type: string
+        longitude:
+          description: longitude.
+          type: number
+        latitude:
+          description: latitude.
+          type: number
+        location_type:
+          description: type of container location, e.g. VESSEL, AIR, STREET, WAREHOUSE, PROCESSING, STORE, WITH_PATIENT, ...
+          type: string
+      type: object
+    Stakeholder:
+      example:
+        wallet_id: wallet_id
+        trade_id: trade_id
+        trade_id_type: trade_id_type
+        stakeholder_role: stakeholder_role
+        display_name: display_name
+      properties:
+        trade_id:
+          description: unique official register entry, e.g. Handelsregistereintrag, court number, ...
+          type: string
+        trade_id_type:
+          description: type of the official register that has issued the trade id
+          type: string
+        display_name:
+          description: display name visible to other network members
+          type: string
+        stakeholder_role:
+          description: one of Manufacturer, Distributor, Pharmacy, Regulator, Hospital, MedicalPractice, CareProvider, DisposalFirm, Insurance, Patient, LawEnforcement
+          type: string
+        wallet_id:
+          description: id of the main wallet, which the stakeholder uses for PT token transactions with other stakeholders
+          type: string
+      type: object
+    Wallet:
+      example:
+        wallet_id: wallet_id
+        balance: 0.80082819046101150206595775671303272247314453125
+        display_name: display_name
+        owner_stakeholder_id: owner_stakeholder_id
+      properties:
+        balance:
+          description: current balance
+          type: number
+        wallet_id:
+          description: wallet uuid
+          type: string
+        display_name:
+          description: descriptive name of the wallet so user can identify it if s/he has multiple wallets
+          type: string
+        owner_stakeholder_id:
+          description: id of the wallet owner (normally an organization
+          type: string
+      type: object
+    LegalTxTerms:
+      example:
+        terms_version: terms_version
+        terms_id_previous_version: terms_id_previous_version
+        terms_text: terms_text
+        terms_id: terms_id
+        timestamp_valid_until: 6
+        language: language
+        timestamp_valid_from: 0
+        validity_tolerance: 1
+        legislation: legislation
+      properties:
+        timestamp_valid_from:
+          description: GMT, Unix Epoch
+          format: int64
+          type: integer
+        timestamp_valid_until:
+          description: GMT, Unix Epoch
+          format: int64
+          type: integer
+        validity_tolerance:
+          description: tolerance window for transactions that begin but do not finish under the governance of these terms (in ms)
+          format: int64
+          type: integer
+        terms_id:
+          description: unique id hash of the transaction terms and conditions
+          type: string
+        terms_version:
+          description: optional version mark of the terms
+          type: string
+        terms_id_previous_version:
+          description: optional link to the previous version of these terms
+          type: string
+        terms_text:
+          description: text of the terms and conditions
+          type: string
+        language:
+          description: ISO language code, e.g. en_us
+          type: string
+        legislation:
+          description: legislation enforcing these terms
+          type: string
+      type: object
+    Transaction:
+      properties:
+        timestamp:
+          description: GMT, Unix Epoch
+          format: int64
+          type: integer
+        tx_uid:
+          description: unique id hash of the transaction
+          type: string
+        terms_id:
+          description: id reference to the terms and conditions for this transaction
+          type: string
+        transaction_channel:
+          description: hyperledger channel the transaction has been executed in
+          type: string
+      type: object
+    Trade:
+      allOf:
+      - $ref: '#/components/schemas/Transaction'
+      example:
+        container_ids:
+        - container_ids
+        - container_ids
+      properties:
+        container_ids:
+          description: containers that are subject of the trade
+          items:
+            type: string
+          type: array
+      type: object
+    Transport:
+      allOf:
+      - $ref: '#/components/schemas/Transaction'
+      example:
+        container_ids:
+        - container_ids
+        - container_ids
+      properties:
+        container_ids:
+          description: containers that are subject of the transport
+          items:
+            type: string
+          type: array
+      type: object
+    Repackage:
+      allOf:
+      - $ref: '#/components/schemas/Transaction'
+      example:
+        from_container_ids:
+        - from_container_ids
+        - from_container_ids
+        to_container_ids:
+        - to_container_ids
+        - to_container_ids
+      properties:
+        from_container_ids:
+          description: containers that are subject of the transport
+          items:
+            type: string
+          type: array
+        to_container_ids:
+          description: containers that are subject of the transport
+          items:
+            type: string
+          type: array
+      type: object
+    InformationQuery:
+      allOf:
+      - $ref: '#/components/schemas/Transaction'
+      example:
+        predicates:
+        - predicates
+        - predicates
+        expires: 0
+        select:
+        - select
+        - select
+        status: status
+      properties:
+        select:
+          description: queried objects and fields in SQL like syntax
+          items:
+            type: string
+          type: array
+        predicates:
+          description: query criteria in SQL like or Prolog like syntax
+          items:
+            type: string
+          type: array
+        expires:
+          description: expiration timestamp of query. Data offers can be submitted until this timestamp
+          format: int64
+          type: integer
+        status:
+          description: One of NEW, PUBLISHED, INCOMING, ACCEPTED, REJECTED, FINISHED, TERMINATED
+          type: string
+      type: object
+    InformationQueryResponse:
+      allOf:
+      - $ref: '#/components/schemas/Transaction'
+      example:
+        predicates:
+        - predicates
+        - predicates
+        tx_uid_ref: tx_uid_ref
+        compensation: 0.80082819046101150206595775671303272247314453125
+      properties:
+        predicates:
+          description: criteria to describe offered subset in SQL like or Prolog like syntax
+          items:
+            type: string
+          type: array
+        tx_uid_ref:
+          description: transaction id of the query this offer refers to
+          type: string
+        compensation:
+          description: PT tokens requested in exchange for the offered information
+          type: number
+      type: object
+    Profile:
+      example:
+        twitter_name: twitter_name
+        facebook_name: facebook_name
+        last_name: last_name
+        active: true
+        first_name: first_name
+        linkedin_name: linkedin_name
+        email: email
+        picture: picture
+        stakeholder_id: stakeholder_id
+      properties:
+        first_name:
+          description: First name of the PT network user.
+          type: string
+        last_name:
+          description: Last name of the PT network user.
+          type: string
+        email:
+          description: Email address
+          type: string
+        twitter_name:
+          description: Twitter name
+          type: string
+        linkedin_name:
+          description: LinkedIn name
+          type: string
+        facebook_name:
+          description: Facebook name
+          type: string
+        picture:
+          description: Image URL
+          type: string
+        stakeholder_id:
+          description: the PT network member that the user/profile is assigned to.
+          type: string
+        active:
+          description: true if the user is currently active. Inactive users will be anonymized but not deleted to maintain integrity of transaction history
+          type: boolean
+      type: object
+    Activity:
+      example:
+        uuid: uuid
+      properties:
+        uuid:
+          description: Unique identifier for the activity
+          type: string
+      type: object
+    Activities:
+      properties:
+        offset:
+          description: Position in pagination.
+          format: int32
+          type: integer
+        limit:
+          description: Number of items to retrieve (100 max).
+          format: int32
+          type: integer
+        count:
+          description: Total number of items available.
+          format: int32
+          type: integer
+        history:
+          items:
+            $ref: '#/components/schemas/Activity'
+          type: array
+      type: object
+    SystemInformation:
+      description: Global system message from PT node operators / Newsfeed
+      example:
+        header: header
+        language: language
+        message: message
+        uuid: uuid
+      properties:
+        uuid:
+          description: Unique identifier for the system information.
+          type: string
+        language:
+          description: Iso Language code, e.g. en_us.
+          type: string
+        header:
+          description: Message header.
+          type: string
+        message:
+          description: message body.
+          type: string
+      type: object
+    SystemInformations:
+      properties:
+        offset:
+          description: Position in pagination.
+          format: int32
+          type: integer
+        limit:
+          description: Number of items to retrieve (100 max).
+          format: int32
+          type: integer
+        count:
+          description: Total number of items available.
+          format: int32
+          type: integer
+        history:
+          items:
+            $ref: '#/components/schemas/SystemInformation'
+          type: array
+      type: object
+    Error:
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+        fields:
+          type: string
+      type: object
+  securitySchemes:
+    apikey:
+      in: query
+      name: server_token
+      type: apiKey
